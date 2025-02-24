@@ -62,7 +62,8 @@ jobs:
                     push: false
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }} 
-    sonarQube-build:
+     
+    build:
         name: Build and analyze
         runs-on: ubuntu-latest
         steps:
