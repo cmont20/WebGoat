@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jruby.RubyProcess;
 import org.owasp.webgoat.container.assignments.AssignmentEndpoint;
 import org.owasp.webgoat.container.assignments.AssignmentHints;
 import org.owasp.webgoat.container.assignments.AttackResult;
@@ -54,8 +55,8 @@ import org.springframework.web.bind.annotation.RestController;
 })
 public class JWTRefreshEndpoint extends AssignmentEndpoint {
 
-  public static final String PASSWORD = "bm5nhSkxCXZkKRy4";
-  private static final String JWT_PASSWORD = "bm5n3SkxCX4kKRy4";
+  public static final String PASSWORD = System.getenv("PASSWORD");
+  private static final String JWT_PASSWORD = System.getenv("JWT_PASSWORD");
   private static final List<String> validRefreshTokens = new ArrayList<>();
 
   @PostMapping(
@@ -101,7 +102,7 @@ public class JWTRefreshEndpoint extends AssignmentEndpoint {
     }
     try {
       Jws<Claims> jwt = Jwts.parser().setSigningKey(JWT_PASSWORD).parseClaimsJws(token.replace("Bearer ", "")); //  Use parseClaimsJws to verify the signature
-      Claims claims = (Claims) jwt.getBody();
+      Claims claims = jwt.getBody();
       String user = (String) claims.get("user");
       if ("Tom".equals(user)) {
         if ("none".equals(jwt.getHeader().get("alg"))) {
